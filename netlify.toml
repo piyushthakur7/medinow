@@ -1,0 +1,46 @@
+# ============================================
+# Netlify Configuration for MediTrack Web App
+# ============================================
+# This deploys only the Next.js frontend (apps/web).
+# The Express API backend (apps/api) must be deployed
+# separately (e.g., Railway, Render, Fly.io).
+
+[build]
+  # Base directory for the monorepo — tells Netlify
+  # to run build commands from the web app's folder
+  base = "apps/web"
+  command = "npm install --prefix ../.. && npx next build"
+  publish = ".next"
+
+# Use the Netlify Next.js runtime for full SSR/ISR support
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# ---- API Proxy Redirects ----
+# These proxy /api/* requests to your deployed backend,
+# similar to the Next.js rewrites in next.config.js.
+# Set the NEXT_PUBLIC_API_URL environment variable in
+# Netlify's dashboard to your backend URL.
+
+[[redirects]]
+  from = "/api/*"
+  to = ":NEXT_PUBLIC_API_URL/api/:splat"
+  status = 200
+  force = true
+
+# ---- SPA Fallback (catch-all) ----
+# Next.js handles its own routing, but this ensures
+# any unmatched routes go through Next.js
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# ---- Headers ----
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

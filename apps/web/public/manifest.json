@@ -1,0 +1,17 @@
+{
+    "name": "MediNow",
+    "short_name": "MediNow",
+    "description": "Simple medicine inventory management for medical stores and clinics",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2563eb",
+    "icons": [
+        {
+            "src": "/logo.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
