@@ -58,7 +58,10 @@ export default function MedicineDetailPage() {
         try {
             const res = await api.get<{ medicine: Medicine }>(`/medicines/${params.id}`);
             if (res.success && res.data) {
-                setMedicine(res.data.medicine);
+                setMedicine({
+                    ...res.data.medicine,
+                    movements: res.data.medicine.movements || [],
+                });
             }
         } catch (error) {
             console.error('Failed to load medicine:', error);
