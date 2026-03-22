@@ -1,4 +1,4 @@
-import { PrismaClient, ExpiryStatus } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { calculateExpiryStatus, getDaysUntilExpiry } from '../services/expiry.js';
 
 const prisma = new PrismaClient();

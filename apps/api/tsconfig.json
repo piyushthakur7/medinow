@@ -12,7 +12,11 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "declaration": true,
-        "declarationMap": true
+        "declarationMap": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noImplicitReturns": false,
+        "noImplicitAny": false
     },
     "include": [
         "src/**/*"
@@ -21,4 +25,4 @@
         "node_modules",
         "dist"
     ]
-}
+}

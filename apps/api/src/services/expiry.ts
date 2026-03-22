@@ -1,5 +1,3 @@
-import { ExpiryStatus } from '@prisma/client';
-
 const EXPIRY_WARNING_DAYS = parseInt(process.env.EXPIRY_WARNING_DAYS || '30');
 
 /**
@@ -8,7 +6,7 @@ const EXPIRY_WARNING_DAYS = parseInt(process.env.EXPIRY_WARNING_DAYS || '30');
  * EXPIRING_SOON: 30 days or less
  * EXPIRED: Past expiry date
  */
-export function calculateExpiryStatus(expiryDate: Date): ExpiryStatus {
+export function calculateExpiryStatus(expiryDate: Date): string {
     const now = new Date();
     now.setHours(0, 0, 0, 0);
 

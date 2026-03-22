@@ -60,7 +60,7 @@ router.post('/signup', async (req, res, next) => {
         const token = jwt.sign(
             { userId: user.id },
             process.env.JWT_SECRET || 'default-secret',
-            { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+            { expiresIn: (process.env.JWT_EXPIRES_IN || '7d') as any }
         );
 
         res.status(201).json({
@@ -109,7 +109,7 @@ router.post('/login', async (req, res, next) => {
         const token = jwt.sign(
             { userId: user.id },
             process.env.JWT_SECRET || 'default-secret',
-            { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+            { expiresIn: (process.env.JWT_EXPIRES_IN || '7d') as any }
         );
 
         res.json({
