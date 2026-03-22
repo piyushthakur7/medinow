@@ -1,5 +1,5 @@
 # ============================================
-# Netlify Configuration for MediTrack Web App
+# Netlify Configuration for MediNow Web App
 # ============================================
 # This deploys only the Next.js frontend (apps/web).
 # The Express API backend (apps/api) must be deployed

@@ -33,7 +33,7 @@ export const useAuthStore = create<AuthState>()(
         (set, get) => ({
             user: null,
             token: null,
-            isLoading: true,
+            isLoading: false,
             error: null,
 
             login: async (credentials: { email?: string; phone?: string; password: string }) => {

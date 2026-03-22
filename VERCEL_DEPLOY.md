@@ -1,4 +1,4 @@
-# MediTrack - Vercel Deployment Guide
+# MediNow - Vercel Deployment Guide
 
 ## Architecture
 
@@ -63,7 +63,7 @@ npm i -g vercel
 vercel login
 
 # Deploy from the project root
-cd meditrack
+cd medinow
 vercel
 
 # Follow the prompts, then set the environment variable
@@ -80,7 +80,7 @@ vercel --prod
 
 After the Vercel frontend is deployed:
 
-1. Copy your Vercel frontend URL (e.g., `https://meditrack.vercel.app`)
+1. Copy your Vercel frontend URL (e.g., `https://medinow.vercel.app`)
 2. Go to your **backend hosting dashboard** (Railway/Render)
 3. Set `FRONTEND_URL` to your Vercel URL
 4. Redeploy the backend

@@ -1,127 +1,73 @@
-# MediTrack - Railway Deployment Guide
+# MediNow - Railway Deployment Guide
 
-## Architecture for Railway
+## Overview
 
-You'll deploy **2 separate Railway services**:
-
-1. **Backend (API)** - Express server at `apps/api`
-2. **Frontend (Web)** - Next.js app at `apps/web`
-
-Plus a **PostgreSQL database** addon.
+This guide explains how to deploy the entire **MediNow Monorepo** (frontend + backend + database) to **Railway**.
 
 ---
 
-## Step-by-Step Deployment
+## Prerequisites
+- A [Railway Account](https://railway.app)
+- Your project pushed to GitHub
 
-### 1. Create a New Railway Project
+---
 
-1. Go to [railway.app](https://railway.app)
-2. Create a new project
+## 🏗️ Deployment Strategy
 
-### 2. Add PostgreSQL Database
+We will use Railway's **Root Directory** feature to deploy two separate services from the same repository:
+1. **API Service** (`apps/api`)
+2. **Web Service** (`apps/web`)
 
-1. Click **"Add Service"** → **"Database"** → **"PostgreSQL"**
-2. Railway will create the database and provide `DATABASE_URL`
+---
 
-### 3. Deploy Backend (API)
+## 1. Setup PostgreSQL Database
 
-1. Click **"Add Service"** → **"GitHub Repo"**
-2. Select your repository
-3. Set **Root Directory** to: `apps/api`
-4. Railway will auto-detect the `railway.toml` configuration
+1. Click **"New Project"** → **"Provision PostgreSQL"**
+2. Railway will create a database and provide a `DATABASE_URL` environment variable.
 
-**Set these environment variables:**
+---
+
+## 2. Deploy the API Backend
+
+1. Click **"New"** → **"GitHub Repo"** → Select your repo
+2. Complete the setup and go to the **Service Settings**
+3. Set **Root Directory** to `apps/api`
+4. Set the following **Variables**:
+
 | Variable | Value |
 |----------|-------|
-| `DATABASE_URL` | Click "Reference" → Select PostgreSQL → `DATABASE_URL` |
-| `JWT_SECRET` | Generate a strong random string (32+ chars) |
-| `FRONTEND_URL` | (Set after frontend is deployed) |
-| `PORT` | Railway sets this automatically |
+| `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (Reference your Postgres service) |
+| `JWT_SECRET` | A strong random string |
+| `FRONTEND_URL` | Your frontend URL (e.g., `https://medinow.up.railway.app`) |
 
-5. Deploy!
+5. Click **Deploy**.
 
-### 4. Deploy Frontend (Web)
+---
 
-1. Click **"Add Service"** → **"GitHub Repo"**
-2. Select the same repository
-3. Set **Root Directory** to: `apps/web`
+## 3. Deploy the Next.js Frontend
 
-**Set these environment variables:**
+1. Click **"New"** → **"GitHub Repo"** → Select your repo again
+2. Go to **Service Settings**
+3. Set **Root Directory** to `apps/web`
+4. Set the following **Variables**:
+
 | Variable | Value |
 |----------|-------|
-| `NEXT_PUBLIC_API_URL` | Your backend URL (e.g., `https://api-production-xxxx.up.railway.app`) |
+| `NEXT_PUBLIC_API_URL` | Your API URL (e.g., `https://api-medinow.up.railway.app`) |
 
-5. Deploy!
-
-### 5. Update Backend CORS
-
-After the frontend is deployed:
-1. Go back to the **API service**
-2. Add/update `FRONTEND_URL` with your frontend URL (e.g., `https://web-production-xxxx.up.railway.app`)
-3. Redeploy
+5. Click **Deploy**.
 
 ---
 
-## Run Database Migrations
+## 4. Final Verification
 
-After backend deploys, run migrations via Railway CLI or the Railway dashboard:
-
-```bash
-# Using Railway CLI
-railway run npx prisma migrate deploy
-railway run npx prisma db seed
-```
-
-Or use the Railway dashboard → Backend service → **"Database"** tab → Run command.
-
----
-
-## Environment Variables Summary
-
-### Backend (`apps/api`)
-```
-DATABASE_URL=postgresql://... (from Railway PostgreSQL)
-JWT_SECRET=your-secure-random-string
-JWT_EXPIRES_IN=7d
-FRONTEND_URL=https://your-frontend.up.railway.app
-PORT=(auto-set by Railway)
-EXPIRY_WARNING_DAYS=30
-LOW_STOCK_THRESHOLD=10
-```
-
-### Frontend (`apps/web`)
-```
-NEXT_PUBLIC_API_URL=https://your-backend.up.railway.app
-```
-
----
-
-## Custom Domain (Optional)
-
-1. Go to your service settings
-2. Click **"Custom Domain"**
-3. Add your domain and configure DNS
+- Visit your frontend URL
+- Check if the Signup/Login works (communicating with the API)
+- Verify that data persists in the database
 
 ---
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Database connection error | Check `DATABASE_URL` variable is set correctly |
-| CORS errors | Verify `FRONTEND_URL` matches your actual frontend URL |
-| API 404 errors | Ensure `NEXT_PUBLIC_API_URL` includes the full backend URL |
-| Build fails | Check the build logs in Railway dashboard |
-
----
-
-## Local Development
-
-For local development, copy the example env files:
-
-```bash
-cp apps/api/.env.example apps/api/.env
-cp apps/web/.env.example apps/web/.env
-```
-
-Then update `apps/api/.env` with your local PostgreSQL connection string.
+- **Build Failures**: Check the logs. Ensure `pnpm` or `npm` versions match your local environment.
+- **Connection Refused**: Verify that `FRONTEND_URL` and `NEXT_PUBLIC_API_URL` use the correct protocols (`https://`).
